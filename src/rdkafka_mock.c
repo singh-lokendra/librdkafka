@@ -1294,13 +1294,17 @@ static void rd_kafka_mock_broker_destroy (rd_kafka_mock_broker_t *mrkb) {
 static rd_kafka_mock_broker_t *
 rd_kafka_mock_broker_new (rd_kafka_mock_cluster_t *mcluster,
                           int32_t broker_id) {
+        char *kafka_port_str = getenv("KAFKA_PORT");
+        int kafka_port = atoi(kafka_port_str);
+
         rd_kafka_mock_broker_t *mrkb;
         rd_socket_t listen_s;
         struct sockaddr_in sin = {
                 .sin_family = AF_INET,
                 .sin_addr = {
                         .s_addr = htonl(INADDR_LOOPBACK)
-                }
+                },
+                .sin_port = htons(kafka_port)
         };
         socklen_t sin_len = sizeof(sin);
 
